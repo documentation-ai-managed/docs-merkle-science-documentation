@@ -2,6 +2,19 @@ openapi: '3.0.0'
 info:
   version: 1.0.0
   title: Merkle Science Documentation
+  description: |
+    Compass is Merkle Science's platform for identifying, scoring, and surfacing risks related to blockchain transactions and entities. This API root exposes the Compass services programmatically, providing endpoints to list and retrieve Risk and Alert resources (for example: /risks, /risks/{riskId}, /alerts, /alerts/{alertId}).
+
+    Getting started
+    - Obtain an API key from your Merkle Science account or administrator.
+    - Include your credentials in requests using the Authorization header: `Authorization: Bearer <API_KEY>`.
+
+    Authentication
+    - Most endpoints require a bearer token as described above. Check individual endpoints for any public exceptions.
+
+    Usage notes
+    - All responses are JSON. Paginated endpoints return an `x-next` header with a link to the next page when available.
+    - Standard HTTP status codes are used to indicate success or failure (2xx for success; 4xx/5xx for errors).
   license:
     name: MIT
 servers:
