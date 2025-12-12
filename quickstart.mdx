@@ -1,0 +1,166 @@
+---
+title: Quickstart Guide
+description: Step-by-step instructions to get started with the Merkle Science platform, from account creation to initial setup for monitoring crypto activities.
+---
+
+## Overview
+
+Get up and running with Merkle Science in minutes. This guide walks you through account creation, dashboard access, user permissions, your first risk assessment, and basics of the Behavioral Rule Engine. Merkle Science helps you detect crypto threats, manage risks, and ensure compliance using advanced behavioral analysis.
+
+<Columns cols={3}>
+  <Card title="Account Setup" icon="user-plus" href="#create-account">
+    Create and verify your account.
+  </Card>
+  <Card title="Permissions" icon="shield" href="#permissions">
+    Set up team access.
+  </Card>
+  <Card title="First Scan" icon="zap" href="#risk-assessment">
+    Run a risk check.
+  </Card>
+</Columns>
+
+## Create Your Account
+
+Sign up to access the Merkle Science dashboard.
+
+<Steps>
+  <Step title="Visit Signup Page" icon="globe">
+    Go to [https://app.merklescience.com/signup](https://app.merklescience.com/signup).
+  </Step>
+  <Step title="Enter Details" icon="edit-3">
+    Provide your email, company name, and create a strong password. Select your role: Compliance Officer, Risk Manager, or Admin.
+  </Step>
+  <Step title="Verify Email" icon="mail">
+    Check your inbox for a verification link from `no-reply@merkle.science`. Click to activate.
+  </Step>
+  <Step title="Log In" icon="log-in">
+    Return to the login page and sign in. You land on the dashboard.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Enable two-factor authentication (2FA) immediately after login for enhanced security.
+</Callout>
+
+## Configure Basic User Permissions
+
+Manage team access to protect sensitive data.
+
+<Steps>
+  <Step title="Navigate to Users" icon="users">
+    From the dashboard, click **Settings** > **Users**.
+  </Step>
+  <Step title="Invite User" icon="plus">
+    Click **Add User**, enter email, and assign role: Viewer (read-only), Editor (assessments), or Admin (full).
+  </Step>
+  <Step title="Set Permissions" icon="key">
+    Toggle permissions like **Risk Scans** and **Rule Engine Access**.
+  </Step>
+  <Step title="Confirm Invite" icon="check-circle">
+    User receives an email. They accept to join.
+  </Step>
+</Steps>
+
+## Run Your First Risk Assessment
+
+Assess a crypto address for illicit activity using the API.
+
+Obtain your API key from **Settings** > **API Keys** > **Generate New Key**.
+
+<CodeGroup tabs="JavaScript,Python,cURL">
+  ```javascript
+  const apiKey = 'YOUR_MERKLE_API_KEY';
+  const address = 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh';
+
+  const response = await fetch('https://api.merklescience.com/v1/risk/assess', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ address })
+  });
+
+  const data = await response.json();
+  console.log(data.riskScore); // e.g., 0.85 (high risk)
+  ```
+  ```python
+  import requests
+
+  api_key = 'YOUR_MERKLE_API_KEY'
+  address = 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'
+
+  response = requests.post(
+      'https://api.merklescience.com/v1/risk/assess',
+      headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+      json={'address': address}
+  )
+
+  data = response.json()
+  print(data['riskScore'])  # e.g., 0.85 (high risk)
+  ```
+  ```bash
+  curl -X POST https://api.merklescience.com/v1/risk/assess \
+    -H "Authorization: Bearer YOUR_MERKLE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"address": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"}'
+  ```
+</CodeGroup>
+
+<Response tabs="Success,High Risk">
+  ```json
+  {
+    "address": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+    "riskScore": 0.12,
+    "riskLevel": "low",
+    "attributes": ["exchange_deposit"]
+  }
+  ```
+  ```json
+  {
+    "address": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+    "riskScore": 0.85,
+    "riskLevel": "high",
+    "attributes": ["mixer", "darknet"]
+  }
+  ```
+</Response>
+
+## Explore Behavioral Rule Engine Basics
+
+The Behavioral Rule Engine analyzes transaction patterns beyond blacklists.
+
+<Tabs>
+  <Tab title="Dashboard View" icon="activity">
+    Navigate to **Rules** > **Behavioral Rules**. View pre-built rules like **Mixer Detection** and **High Velocity Transfers**.
+
+    <ParamField path="address" param-type="string" required="true">
+      Target crypto address to evaluate.
+    </ParamField>
+
+    <ParamField query="threshold" param-type="number" required="false">
+      Custom risk threshold (0.0-1.0).
+    </ParamField>
+  </Tab>
+  <Tab title="Create Custom Rule" icon="plus-circle">
+    Click **New Rule**. Define conditions:
+
+    | Condition       | Operator | Value Example |
+    |-----------------|----------|---------------|
+    | Transaction Count | `>`     | 50            |
+    | Average Amount   | `>`     | 10000 USD     |
+    | Peer Risk Score  | `>`     | 0.5           |
+
+    Save and test on sample data.
+  </Tab>
+</Tabs>
+
+<Expandable title="Next Steps" default-open="true">
+  - Integrate with your KYC/AML workflow.
+  - Set up webhooks for real-time alerts: `https://your-webhook.com/merkle-alerts`.
+  - Review [compliance reports](/docs/compliance).
+</Expandable>
+
+<Callout kind="success">
+  Congratulations! You completed the quickstart. Monitor crypto risks proactively with Merkle Science.
+</Callout>

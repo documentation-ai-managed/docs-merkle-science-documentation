@@ -1,0 +1,190 @@
+---
+title: Authentication and Access Control
+description: Details on securing access to the Merkle Science platform, including API keys, tokens, and role-based permissions for compliance teams.
+---
+
+## Overview
+
+Secure your access to the Merkle Science platform using API keys for simple integrations or OAuth 2.0 tokens for advanced applications. Role-based access control (RBAC) ensures compliance teams view only authorized data. Follow these methods to generate credentials, authenticate requests, and apply best practices for protection.
+
+<Callout kind="info">
+  Generate all credentials from the Merkle Science dashboard under Account > Security.
+</Callout>
+
+## Generate API Keys
+
+Create and manage API keys to authenticate requests to Merkle Science endpoints.
+
+<Steps>
+  <Step title="Navigate to Security" icon="shield">
+    Log in to your Merkle Science dashboard.
+    
+    Select **Account** > **Security** from the sidebar.
+  </Step>
+  <Step title="Create Key" icon="key">
+    Click **Generate New API Key**.
+    
+    Enter a descriptive name, like `Compliance Analytics Reader`.
+    
+    Copy the key immediately—it displays only once.
+  </Step>
+  <Step title="Assign Permissions" icon="settings">
+    Select scopes: `read:transactions`, `write:reports`, or `full:access`.
+    
+    Save and store securely.
+  </Step>
+</Steps>
+
+<ParamField header="X-API-Key" param-type="string" required="true">
+  Your generated API key, prefixed with `ms_`.
+</ParamField>
+
+<ParamField header="Content-Type" param-type="string" required="true">
+  Set to `application/json`.
+</ParamField>
+
+## OAuth 2.0 Token Authentication
+
+Use OAuth 2.0 for user-specific access with short-lived tokens. Exchange your client credentials for a bearer token.
+
+<Request tabs="cURL,JavaScript,Python" show-lines="true">
+```bash
+curl -X POST https://api.merklescience.com/oauth/token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "grant_type": "client_credentials",
+    "client_id": "your_client_id",
+    "client_secret": "your_client_secret"
+  }'
+```
+
+```javascript
+const response = await fetch('https://api.merklescience.com/oauth/token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    grant_type: 'client_credentials',
+    client_id: 'your_client_id',
+    client_secret: 'your_client_secret'
+  })
+});
+const data = await response.json();
+```
+
+```python
+import requests
+
+response = requests.post('https://api.merklescience.com/oauth/token', json={
+    'grant_type': 'client_credentials',
+    'client_id': 'your_client_id',
+    'client_secret': 'your_client_secret'
+})
+data = response.json()
+```
+</Request>
+
+<Response tabs="200,401">
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+```json
+{
+  "error": "invalid_client",
+  "error_description": "Client authentication failed"
+}
+```
+</Response>
+
+Include the token in subsequent requests:
+
+```javascript
+fetch('/api/v1/transactions', {
+  headers: {
+    'Authorization': `Bearer ${access_token}`
+  }
+});
+```
+
+## Role-Based Access Control (RBAC)
+
+RBAC assigns permissions based on user roles. Admins manage full access, while analysts focus on read-only views.
+
+<Columns cols={2}>
+  <Card title="Admin" icon="shield" horizontal>
+    Full access: Create keys, manage users, view all data.
+  </Card>
+  <Card title="Analyst" icon="users" horizontal>
+    Read transactions, generate reports, limited exports.
+  </Card>
+  <Card title="Viewer" icon="eye" horizontal>
+    View dashboards and reports only.
+  </Card>
+  <Card title="Compliance Officer" icon="check-circle" horizontal>
+    Access risk scores and alerts.
+  </Card>
+</Columns>
+
+## Authentication Examples
+
+Integrate authentication across languages.
+
+<CodeGroup tabs="JavaScript,Python">
+```javascript
+const MERKLE_API_KEY = 'ms_your_api_key_here';
+
+async function getTransactions() {
+  const response = await fetch('https://api.merklescience.com/v1/transactions', {
+    headers: {
+      'X-API-Key': MERKLE_API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+  return response.json();
+}
+```
+
+```python
+import requests
+import os
+
+MERKLE_API_KEY = os.getenv('MERKLE_API_KEY')
+
+response = requests.get(
+    'https://api.merklescience.com/v1/transactions',
+    headers={
+        'X-API-Key': MERKLE_API_KEY,
+        'Content-Type': 'application/json'
+    }
+)
+data = response.json()
+```
+</CodeGroup>
+
+## Best Practices
+
+<ExpandableGroup>
+  <Expandable title="Secure Credential Storage" default-open="true">
+    Store keys in environment variables: `export MERKLE_API_KEY=ms_your_key`.
+    
+    Never commit to Git. Use `.env` files with `.gitignore`.
+  </Expandable>
+  <Expandable title="Rotate Regularly">
+    Rotate keys every 90 days or after potential exposure.
+    
+    Revoke compromised keys immediately from the dashboard.
+  </Expandable>
+  <Expandable title="Enable MFA">
+    Activate multi-factor authentication (MFA) for all accounts.
+    
+    Use app-based TOTP over SMS.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="tip">
+  Monitor API usage logs in the dashboard to detect anomalies.
+</Callout>

@@ -1,0 +1,157 @@
+---
+title: Changelog
+description: Version history of the Merkle Science platform, highlighting updates, new features, and improvements for crypto risk management.
+---
+
+## Overview
+
+Merkle Science delivers regular updates to its predictive crypto risk and intelligence platform. You receive enhanced threat detection, improved compliance tools, and optimized performance for managing cryptocurrency risks. Review the latest releases below to stay current with Behavioral Rule Engine advancements and other key changes.
+
+<Columns cols={3}>
+  <Card title="Latest Release" icon="zap" href="#v2-1-0">
+    Explore v2.1.0 features for advanced risk scoring.
+  </Card>
+  <Card title="Migration Guide" icon="settings" href="#migration">
+    Follow steps to upgrade smoothly.
+  </Card>
+  <Card title="All Releases" icon="list" href="#">
+    View complete version history.
+  </Card>
+</Columns>
+
+<Callout kind="info">
+  Subscribe to the Merkle Science changelog RSS feed or API notifications to get instant alerts on new releases.
+</Callout>
+
+## Recent Releases
+
+### v2.1.0 - Behavioral Rule Engine Enhancements
+
+<Update label="2024-10-20" description="v2.1.0" tags={["feature", "improvement"]}>
+
+## New Features
+
+- Added real-time behavioral anomaly detection using machine learning models trained on illicit crypto flows.
+- Introduced custom rule builder for tailoring KYC/AML checks to your jurisdiction.
+
+## Improvements
+
+- Optimized query performance by 40% for high-volume transaction monitoring.
+- Enhanced dashboard visualizations with interactive heatmaps for risk clusters.
+
+```javascript
+// Example: Query new anomaly detection endpoint
+const response = await fetch('https://api.merklescience.com/v2/risks/anomalies', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    walletAddress: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+    threshold: 0.8
+  })
+});
+```
+
+## Bug Fixes
+
+- Fixed intermittent failures in blockchain data syncing for Ethereum and Bitcoin networks.
+- Resolved UI glitches in rule editor for long rule descriptions.
+
+</Update>
+
+### v2.0.0 - Compliance Platform Overhaul
+
+<Update label="2024-09-15" description="v2.0.0" tags={["feature", "breaking"]}>
+
+## New Features
+
+- Launched unified compliance dashboard integrating risk scores, sanctions screening, and transaction graphs.
+- Integrated support for 20+ new blockchains including Solana and Polygon.
+
+## Breaking Changes
+
+- Deprecated legacy `/v1/risks` endpoint; migrate to `/v2/risks`.
+- Updated authentication to require JWT tokens instead of API keys for enhanced security.
+
+<CodeGroup tabs="JavaScript,Python">
+```javascript
+// New v2 endpoint usage
+const risks = await fetch('https://api.merklescience.com/v2/risks', {
+  headers: { 'Authorization': `Bearer ${YOUR_JWT_TOKEN}` }
+});
+```
+```python
+# New v2 endpoint usage
+import requests
+response = requests.get(
+    'https://api.merklescience.com/v2/risks',
+    headers={'Authorization': f'Bearer {YOUR_JWT_TOKEN}'}
+)
+```
+</CodeGroup>
+
+</Update>
+
+### v1.9.0 - Performance and Stability
+
+<Update label="2024-08-10" description="v1.9.0" tags={["bugfix", "improvement"]}>
+
+## Improvements
+
+- Reduced API latency by 25% through edge caching of wallet risk profiles.
+- Added bulk transaction screening endpoint for high-throughput compliance teams.
+
+## Bug Fixes
+
+- Corrected false positives in mixer detection for Tornado Cash successors.
+- Patched memory leaks in long-running risk assessment jobs.
+
+</Update>
+
+## Migration Guide
+
+Follow these steps to upgrade from v1.x to v2.x and handle deprecations.
+
+<Steps>
+  <Step title="Update Authentication" icon="shield">
+    Generate JWT tokens via the new auth endpoint.
+
+    ```bash
+    curl -X POST https://api.merklescience.com/auth/token \
+      -d "client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET"
+    ```
+  </Step>
+  <Step title="Replace Deprecated Endpoints" icon="code">
+    Update all calls from `/v1/risks` to `/v2/risks`.
+  </Step>
+  <Step title="Test New Features" icon="play">
+    Validate behavioral rules with sample illicit flows.
+  </Step>
+</Steps>
+
+<Expandable title="Advanced Migration Details" default-open="false">
+
+<Tabs>
+  <Tab title="JavaScript SDK" icon="code">
+    Install the updated SDK:
+
+    ```bash
+    npm install @merkle-science/sdk@2.0.0
+    ```
+  </Tab>
+  <Tab title="Python SDK" icon="python">
+    Update your requirements:
+
+    ```bash
+    pip install merkle-science-sdk==2.0.0
+    ```
+  </Tab>
+</Tabs>
+
+</Expandable>
+
+<Callout kind="tip">
+  Contact support@merklescience.com for personalized migration assistance or custom rule tuning.
+</Callout>
